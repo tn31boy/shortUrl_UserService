@@ -1,9 +1,19 @@
 package com.UrlShortnet.UserService.Entity;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import lombok.*;
 
+@Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@Builder
 public class UserDetails {
 
+    @Id
     private int id;
 
     @Column(nullable=false)
