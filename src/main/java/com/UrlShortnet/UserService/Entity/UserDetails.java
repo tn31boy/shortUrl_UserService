@@ -5,11 +5,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.*;
 
+@Data
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
 @Builder
 public class UserDetails {
 
@@ -26,5 +25,5 @@ public class UserDetails {
     private String PhNo;
 
     @Column(nullable = false)
-    private String Password;
+    private String password;
 }
