@@ -28,4 +28,13 @@ public class LoginController {
         return ResponseEntity.status(HttpStatus.FOUND).body("login Success");
     }
 
+    @PostMapping("/forget")
+    public ResponseEntity<?> forgetpass(@RequestParam("email") String email, @RequestParam("pass") String password)
+    {
+        if(loginService.forgetPassword(email,password)==1)
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body("SUccessfully changed");
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("bad Credentials");
+    }
+
 }
