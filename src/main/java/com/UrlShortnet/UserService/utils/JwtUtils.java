@@ -25,7 +25,7 @@ public class JwtUtils {
         try
         {
             return Jwts.parser()
-                    .setSigningKey(privateKey)
+                    .setSigningKey(privateKey.getBytes())
                     .parseClaimsJws(token)
                     .getBody().getSubject();
         }
