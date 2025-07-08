@@ -25,6 +25,7 @@ public class LoginController {
         UserDetails user=loginService.login(email,password);
         if(user==null)
             return ResponseEntity.status(HttpStatus.ACCEPTED).body("NO user in Db");
+
         return ResponseEntity.status(HttpStatus.FOUND).body("login Success");
     }
 
