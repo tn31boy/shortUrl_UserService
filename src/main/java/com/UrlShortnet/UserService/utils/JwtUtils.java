@@ -1,5 +1,6 @@
 package com.UrlShortnet.UserService.utils;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -16,24 +17,29 @@ public class JwtUtils {
     {
         return Jwts.builder().setSubject(email)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis()+(1000*60*60)))
+                .setExpiration(new Date(System.currentTimeMillis()+(1000*60)))
                 .signWith(SignatureAlgorithm.HS256,privateKey.getBytes()).compact();
     }
 
-    public String isValied(String token)
+    public String isValid(String token)
     {
         try
         {
-            return Jwts.parser()
-                    .setSigningKey(privateKey.getBytes())
-                    .parseClaimsJws(token)
-                    .getBody().getSubject();
+            Claims claims=Jwts.parser().setSigningKey(privateKey.getBytes()).parseClaimsJws(token).getBody();
+            if(expired(claims.getExpiration()))
+                return null;
+            return claims.getSubject();
         }
         catch (JwtException e)
         {
             System.out.println(e);
             return null;
         }
+    }
+
+    public boolean expired(Date time)
+    {
+        return time.before(new Date());
     }
 
 

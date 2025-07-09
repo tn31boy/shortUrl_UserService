@@ -39,18 +39,19 @@ public class LoginController {
     }
 
     @PostMapping("/forget")
-    public ResponseEntity<?> forgetpass(@RequestParam("email") String email, @RequestParam("pass") String password, @RequestHeader("Authorization") String token)
+    public ResponseEntity<?> forgetpass(@RequestParam("email") String email, @RequestParam("pass") String password, @RequestHeader(value = "Authorization",required = false) String token)
     {
-        if(token!=null && !token.startsWith("Bearer "))
-            return ResponseEntity.accepted().body("Authorization not valid");
-
+        if(token==null || !token.startsWith("Bearer "))
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("JWT Token NOt Present");
 
         String auth=token.substring(7);
-       // System.out.println(auth+"token");
-        String sub=jwtUtils.isValied(auth);
+        if(auth.split("\\.").length!=3)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("invalid format");
+
+        String sub=jwtUtils.isValid(auth);
         if(sub==null)
-            return ResponseEntity.ok("invalid token");
-       // System.out.println("subject of token---"+sub);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("invalid token or Expired");
+
 
         if(loginService.forgetPassword(email,password)==1)
             return ResponseEntity.status(HttpStatus.ACCEPTED).body("SUccessfully changed");
